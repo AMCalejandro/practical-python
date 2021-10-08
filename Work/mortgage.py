@@ -34,7 +34,6 @@ while (principal > 0):
             principal = principal * (1+rate/12) - payment
             total_paid = total_paid + payment
 
-    print(month, total_paid, round(principal, ndigits = 2))
+    print(f'{month} {total_paid:0.4f} {principal:0.4f}')
 
-
-print('Total paid', total_paid, "\n", 'months required', month)
+print(f'\nTotal paid {total_paid:0.4f} months required {month:0.4f}')
