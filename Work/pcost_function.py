@@ -3,6 +3,7 @@
 
 def portfolio_cost(filename):
     import csv
+    import sys
     sum = 0 # Initializing a variable to 0
     file = open(filename)
     rows = csv.reader(file)
@@ -19,4 +20,12 @@ def portfolio_cost(filename):
     file.close()
 
 
-#print("Total cost",  portfolio_cost('Data/portfolio.csv'))
+
+import sys
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
+else:
+    filename = 'Data/portfolio.csv'
+
+cost = portfolio_cost(filename)
+print('Total cost:', cost)
