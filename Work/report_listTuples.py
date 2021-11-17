@@ -5,7 +5,7 @@
 def read_portfolio(filename):
 	import csv
 	list_init = [] # Initialising list in which we append the resulting tuples
-	with open(filename, 'rf') as csv_file:
+	with open(filename, 'r') as csv_file:
 		header = next(csv_file)
 		file = csv.reader(csv_file)
 		for line in file:
