@@ -28,13 +28,24 @@ def read_prices(filename):
 
 	return(dict_init)
 
+# Function to report a list of tupes from dictionary of prices and list of stocks
+def make_report(dict_prices, list_stocks):
+	list_init = []
+	#print(dict_prices)
+	for i in range(len(list_stocks)):
+		name,shares,price_old = list(list_stocks[i].values())
+		#print(name,shares,price_old)
+		price_new = float(dict_prices.get(name))
+		list_init.append((name,shares, price_new, (price_new-float(price_old))))
+	return(list_init)
 
+
+# Getting ready to come up with the gain/loss
 # Currtent value of the portfolio
 list_dictionary_portfolio = read_portfolio("Data/portfolio.csv")
 # Getting the prices
 dictionary_prices = read_prices("Data/prices.csv")
 #print(dictionary_prices)
-
 portfolio_value = 0
 current_value = 0
 for stock in list_dictionary_portfolio:
@@ -47,7 +58,7 @@ for stock in list_dictionary_portfolio:
 	value_stock = dictionary_prices[name_stock]
 	current_value += float(dictionary_prices[name_stock])*shares_stock
 
-
+# Printing the gain/loss
 gain = current_value - portfolio_value
 if gain > 0:
 	print(('The gain from your portfolio is:  {gain}').format(gain=gain))
@@ -57,6 +68,13 @@ else:
 	print('Neither gains nor losses')
 
 
+# Printing the current stocks worth
 print(('Current stocks value from the porfolio {portfolio_value}').format(portfolio_value=portfolio_value))
 
-#print(abs(current_value-portfolio_value))
+
+# Using the list od stocks and dictionary of prices to come up with the list of tuples
+list_tuples = make_report(dictionary_prices, list_dictionary_portfolio)
+
+for i in list_tuples:
+	print(i)
+
