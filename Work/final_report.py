@@ -11,7 +11,6 @@ def read_portfolio(filename):
 		for line in file:
 			list_init.append( {header[0] : line[0], header[1] : int(line[1]), \
 					   header[2] : float(line[2])} )
-		csv_file.close()
 	return(list_init)
 
 # Function to get the dictionary of prices
