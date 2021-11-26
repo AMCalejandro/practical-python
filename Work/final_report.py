@@ -75,6 +75,13 @@ print(('Current stocks value from the porfolio {portfolio_value}').format(portfo
 # Using the list od stocks and dictionary of prices to come up with the list of tuples
 list_tuples = make_report(dictionary_prices, list_dictionary_portfolio)
 
-for i in list_tuples:
-	print(i)
+headers = ('Name', 'Shares', 'Price', 'Change')
+print('%10s %10s %10s %10s' % headers)
+print(('-'*10 + ' ') * len(headers))
+#for r in list_tuples:
+#	print('%10s %10d %10.2f %10.2f' % r)
+
+for name,shares,price,change in list_tuples:
+	dollar_price='$' + str(price)
+	print(f'{name:>10s} {shares:>10d} {dollar_price:>9s} {change:>10.2f}')
 
