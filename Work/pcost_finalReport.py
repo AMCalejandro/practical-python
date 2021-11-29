@@ -15,12 +15,12 @@ def read_portfolio(filename):
 	with open(filename, 'r') as csv_file:
 		header = next(csv_file).rstrip().split(',')
 		file = csv.reader(csv_file)
-		for index, line in enumerate(file):
+		for index, line in enumerate(file, start=1):
 			bool = None
 			for element in line:
 				if is_empty_or_blank(element):
 					index = int(index)
-					print(f'Row 4: Couldn\'t convert {index:>0d} {line}')
+					print(f'Row {index:>0d}: Couldn\'t convert: {line}')
 					bool = True
 					break
 			if bool:
