@@ -57,9 +57,9 @@ def make_report(dict_prices, list_stocks):
 
 # Getting ready to come up with the gain/loss
 # Currtent value of the portfolio
+
 #list_dictionary_portfolio = read_portfolio("Data/portfolio.csv")
 list_dictionary_portfolio = read_portfolio("Data/missing.csv")
-
 # Getting the prices
 dictionary_prices = read_prices("Data/prices.csv")
 #print(dictionary_prices)
