@@ -1,7 +1,6 @@
 # From list of stocks and dictionary of prices, get the current value plus gain/loss
 
 # Custom function to check for empty strings
-
 def is_empty_or_blank(msg):
 	""" This function checks if given string is empty
 	or contain only shite spaces"""
@@ -15,6 +14,7 @@ def read_portfolio(filename):
 	with open(filename, 'r') as csv_file:
 		header = next(csv_file).rstrip().split(',')
 		file = csv.reader(csv_file)
+		# Checking if there if there is any empty string
 		for index, line in enumerate(file, start=1):
 			bool = None
 			for element in line:
@@ -26,7 +26,8 @@ def read_portfolio(filename):
 			if bool:
 				continue
 			else:
-				list_init.append( {header[0] : line[0], header[1] : int(line[1]), header[2] : float(line[2])} )
+				list_init.append( {header[0] : line[0], header[1] : int(line[1]),\
+						  header[2] : float(line[2])} )
 	return(list_init)
 
 # Function to get the dictionary of prices
