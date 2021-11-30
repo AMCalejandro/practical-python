@@ -8,27 +8,58 @@ def is_empty_or_blank(msg):
 	return re.search("^\s*$", msg)
 
 # Function to retrieve list of stocks
+#def read_portfolio(filename):
+#	import csv
+#	list_init = [] # Initialising list in which we append the resulting tuples
+#	with open(filename, 'r') as csv_file:
+#		header = next(csv_file).rstrip().split(',')
+#		file = csv.reader(csv_file)
+#		# Checking if there if there is any empty string
+#		for index, line in enumerate(file, start=1):
+#			bool = None
+#			for element in line:
+#				if is_empty_or_blank(element):
+#					index = int(index)
+#					print(f'Row {index:>0d}: Couldn\'t convert: {line}')
+#					bool = True
+#					break
+#			if bool:
+#				continue
+#			else:
+#				list_init.append( {header[0] : line[0], header[1] : int(line[1]),\
+#						  header[2] : float(line[2])} )
+#	return(list_init)
+
+
+# Function to retrieve list of stocks
 def read_portfolio(filename):
-	import csv
-	list_init = [] # Initialising list in which we append the resulting tuples
-	with open(filename, 'r') as csv_file:
-		header = next(csv_file).rstrip().split(',')
-		file = csv.reader(csv_file)
-		# Checking if there if there is any empty string
-		for index, line in enumerate(file, start=1):
-			bool = None
-			for element in line:
-				if is_empty_or_blank(element):
-					index = int(index)
-					print(f'Row {index:>0d}: Couldn\'t convert: {line}')
-					bool = True
-					break
-			if bool:
-				continue
-			else:
-				list_init.append( {header[0] : line[0], header[1] : int(line[1]),\
-						  header[2] : float(line[2])} )
-	return(list_init)
+        import csv
+        list_init = [] # Initialising list in which we append the resulting tuples
+        with open(filename, 'r') as file:
+                csv_file = csv.reader(file)
+                header = next(csv_file)
+                # Checking if there if there is any empty string
+                for index, line in enumerate(csv_file, start=1):
+                        record = dict(zip(header, line))
+                        #print(record)
+                        bool = None
+                        for element in line:
+                                if is_empty_or_blank(element):
+                                        index = int(index)
+                                        print(f'Row {index:>0d}: Couldn\'t convert: {line}')
+                                        bool = True
+                                        break
+                        if bool:
+                                continue
+                        else:
+                                list_init.append( {'name': record['name'],\
+                                                  'shares' : int(record['shares']),\
+                                                  'price': float(record['price'])} )
+                                #print(list_init)
+        return(list_init)
+
+
+
 
 # Function to get the dictionary of prices
 def read_prices(filename):
