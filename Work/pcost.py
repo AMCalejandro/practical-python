@@ -1,18 +1,51 @@
-# pcost.py
-#
-# Exercise 1.27
+# Turning the pcost.py script into a function
 
-import csv
-sum = 0 # Initializing a variable to 0
-#with open('Data/portfolio.csv', 'rt') as file:
-file = open('Data/portfolio.csv')
-rows = csv.reader(file) 
-header = next(rows) # Removing the header of the file
-for line in rows:
-    #print(line)
-    #list = line.split(',')
-    sum += (int(line[1])*float(line[2])) # Transforming data and calculating the price of all stockes
 
-print(f'Total cost {sum}')
+#def portfolio_cost(filename):
+#    import csv
+#    import sys
+#    sum = 0 # Initializing a variable to 0
+#    file = open(filename)
+#    rows = csv.reader(file)
+#    headers = next(rows)
+#    line_count=0
+#    for line in rows:
+#        try:
+#            #list = line.split(',')
+#            sum += (int(line[1])*float(line[2]))
+#            line_count += 1
+#        except:
+#            print("Missing integers in line:",int(line_count)+1,":", line)
+#    return(sum)
+#    file.close()
 
-file.close()
+# Improving the function. Using enumerate to track the index and
+# Using zip to create a dictionary with the header and one row at a time
+def portfolio_cost(filename):
+    import csv
+    import sys
+    sum = 0 # Initializing a variable to 0
+    file = open(filename)
+    rows = csv.reader(file)
+    headers = next(rows)
+    for index, line in enumerate(rows, start=1):
+        record = dict(zip(headers,line))
+        #print(record)
+        try:
+            sum += float(record['price'])*int(record['shares'])
+        except:
+            print("Missing integers in line:", index)
+    return(sum)
+    file.close()
+
+
+
+
+import sys
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
+else:
+    filename = 'Data/portfolio.csv'
+
+cost = portfolio_cost(filename)
+print('Total cost:', cost)
