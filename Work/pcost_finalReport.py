@@ -32,6 +32,9 @@ def is_empty_or_blank(msg):
 
 
 # Function to retrieve list of stocks
+# Improved with zip and enumerate.
+# read_portfolio is not hardcoded anymore and now is able to access the values of interest
+# given more generic files
 def read_portfolio(filename):
         import csv
         list_init = [] # Initialising list in which we append the resulting tuples
@@ -90,7 +93,11 @@ def make_report(dict_prices, list_stocks):
 # Currtent value of the portfolio
 
 #list_dictionary_portfolio = read_portfolio("Data/portfolio.csv")
-list_dictionary_portfolio = read_portfolio("Data/missing.csv")
+# Reading data with missing values to make sure my function handles them
+#list_dictionary_portfolio = read_portfolio("Data/missing.csv")
+# Trying to read data with different format to make sure the right use of zip and enumerate
+list_dictionary_portfolio = read_portfolio("Data/portfoliodate.csv")
+
 # Getting the prices
 dictionary_prices = read_prices("Data/prices.csv")
 #print(dictionary_prices)
