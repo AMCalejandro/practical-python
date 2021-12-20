@@ -75,6 +75,7 @@ def read_prices(filename):
 		#print(stocks)
 		if stocks:
 			dict_init[stocks[0]] = stocks[1]
+	file.close()
 	return(dict_init)
 
 # Function to report a list of tupes from dictionary of prices and list of stocks
