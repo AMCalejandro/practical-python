@@ -8,30 +8,6 @@ def is_empty_or_blank(msg):
 	return re.search("^\s*$", msg)
 
 # Function to retrieve list of stocks
-#def read_portfolio(filename):
-#	import csv
-#	list_init = [] # Initialising list in which we append the resulting tuples
-#	with open(filename, 'r') as csv_file:
-#		header = next(csv_file).rstrip().split(',')
-#		file = csv.reader(csv_file)
-#		# Checking if there if there is any empty string
-#		for index, line in enumerate(file, start=1):
-#			bool = None
-#			for element in line:
-#				if is_empty_or_blank(element):
-#					index = int(index)
-#					print(f'Row {index:>0d}: Couldn\'t convert: {line}')
-#					bool = True
-#					break
-#			if bool:
-#				continue
-#			else:
-#				list_init.append( {header[0] : line[0], header[1] : int(line[1]),\
-#						  header[2] : float(line[2])} )
-#	return(list_init)
-
-
-# Function to retrieve list of stocks
 # Improved with zip and enumerate.
 # read_portfolio is not hardcoded anymore and now is able to access the values of interest
 # given more generic files
@@ -86,7 +62,7 @@ def make_report(dict_prices, list_stocks):
 		name,shares,price_old = list(list_stocks[i].values())
 		#print(name,shares,price_old)
 		price_new = float(dict_prices.get(name))
-		list_init.append((name,shares, price_new, (price_new-float(price_old))))
+		list_init.append((name,shares, price_new, (price_new - float(price_old))))
 	return(list_init)
 
 
@@ -99,20 +75,30 @@ def make_report(dict_prices, list_stocks):
 # Trying to read data with different format to make sure the right use of zip and enumerate
 list_dictionary_portfolio = read_portfolio("Data/portfoliodate.csv")
 
+
 # Getting the prices
 dictionary_prices = read_prices("Data/prices.csv")
 #print(dictionary_prices)
-portfolio_value = 0
-current_value = 0
-for stock in list_dictionary_portfolio:
-	name_stock = stock['name']
-	shares_stock = int(stock['shares'])
-	portfolio_value += stock['price']*shares_stock
+#portfolio_value = 0
+#current_value = 0
+#for stock in list_dictionary_portfolio:
+#	name_stock = stock['name']
+#	shares_stock = int(stock['shares'])
+#	portfolio_value += stock['price']*shares_stock
 	#print(name_stock)
 	#print(shares_stock)
 	#Accessing the dictionary of current sotck prices per name
-	value_stock = dictionary_prices[name_stock]
-	current_value += float(dictionary_prices[name_stock])*shares_stock
+	#value_stock = dictionary_prices[name_stock]
+#	current_value += float(dictionary_prices[name_stock])*shares_stock
+
+
+# Doing sequence reduction to get the portfolio value in one line of coe
+portfolio_value = sum([float(s['price']) * int(s['shares']) for s in list_dictionary_portfolio])
+print(portfolio_value)
+#Doing sequence reduction to get the current value of our portfolio
+current_value = sum([ float(dictionary_prices[s['name']]) * int(s['shares']) for s in list_dictionary_portfolio])
+print(current_value)
+
 
 # Printing the gain/loss
 gain = current_value - portfolio_value
