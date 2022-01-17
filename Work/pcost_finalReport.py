@@ -55,7 +55,7 @@ def read_prices(filename):
 	return(dict_init)
 
 # Function to report a list of tupes from dictionary of prices and list of stocks
-def make_report(dict_prices, list_stocks):
+def make_summary(dict_prices, list_stocks):
 	list_init = []
 	#print(dict_prices)
 	for i in range(len(list_stocks)):
@@ -73,12 +73,18 @@ def make_report(dict_prices, list_stocks):
 # Reading data with missing values to make sure my function handles them
 #list_dictionary_portfolio = read_portfolio("Data/missing.csv")
 # Trying to read data with different format to make sure the right use of zip and enumerate
-list_dictionary_portfolio = read_portfolio("Data/portfoliodate.csv")
+#list_dictionary_portfolio = read_portfolio("Data/portfoliodate.csv")
 
 
 # Getting the prices
-dictionary_prices = read_prices("Data/prices.csv")
+#dictionary_prices = read_prices("Data/prices.csv")
 #print(dictionary_prices)
+
+
+#print(make_report(dictionary_prices, list_dictionary_portfolio))
+
+
+### THIS HAS BEEN IMPROVED MAKING USE OF LIST COMPREHENSION ###
 #portfolio_value = 0
 #current_value = 0
 #for stock in list_dictionary_portfolio:
@@ -90,40 +96,52 @@ dictionary_prices = read_prices("Data/prices.csv")
 	#Accessing the dictionary of current sotck prices per name
 	#value_stock = dictionary_prices[name_stock]
 #	current_value += float(dictionary_prices[name_stock])*shares_stock
+def print_report(list_dictionary_portfolio, dictionary_prices):
+	# Doing sequence reduction to get the portfolio value in one line of code
+	portfolio_value = sum([float(s['price']) * int(s['shares']) for s in list_dictionary_portfolio])
+	print("Initial portfolio value:", portfolio_value)
+
+	#Doing sequence reduction to get the current value of our portfolio
+	current_value = sum([ float(dictionary_prices[s['name']]) * int(s['shares']) for s in list_dictionary_portfolio])
+	print("Current portofolio value", current_value)
+
+	# Printing the gain/loss
+	gain = current_value - portfolio_value
+	if gain > 0:
+        	print(('The gain from your portfolio is:  {gain}').format(gain=gain))
+	elif gain < 0:
+        	print(('The loss from your portfolio is: {gain}').format(gain=gain))
+	else:
+        	print('Neither gains nor losses')
 
 
-# Doing sequence reduction to get the portfolio value in one line of coe
-portfolio_value = sum([float(s['price']) * int(s['shares']) for s in list_dictionary_portfolio])
-print(portfolio_value)
-#Doing sequence reduction to get the current value of our portfolio
-current_value = sum([ float(dictionary_prices[s['name']]) * int(s['shares']) for s in list_dictionary_portfolio])
-print(current_value)
+def print_sharesUpdate(list_dictionary_portfolio, dictionary_prices):
+	# Using the list of stocks and dictionary of prices to come up with the list of tuples
+	list_tuples = make_summary(dictionary_prices, list_dictionary_portfolio)
+	headers = ('Name', 'Shares', 'Price', 'Change')
+	print('%10s %10s %10s %10s' % headers)
+	print(('-'*10 + ' ') * len(headers))
+
+	for name,shares,price,change in list_tuples:
+	        dollar_price='$' + str(price)
+        	print(f'{name:>10s} {shares:>10d} {dollar_price:>9s} {change:>10.2f}')
 
 
-# Printing the gain/loss
-gain = current_value - portfolio_value
-if gain > 0:
-	print(('The gain from your portfolio is:  {gain}').format(gain=gain))
-elif gain < 0:
-	print(('The loss from your portfolio is: {gain}').format(gain=gain))
-else:
-	print('Neither gains nor losses')
+
+def portfolio_report(portfolio_filename, prices_filename):
+	list_dictionary_portfolio = read_portfolio(portfolio_filename)
+	dictionary_prices = read_prices(prices_filename)
+
+	print_report(list_dictionary_portfolio, dictionary_prices)
+	print_sharesUpdate(list_dictionary_portfolio, dictionary_prices)
+
+portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
 
 
-# Printing the current stocks worth
-print(('Current stocks value from the porfolio {portfolio_value}').format(portfolio_value=portfolio_value))
 
 
-# Using the list od stocks and dictionary of prices to come up with the list of tuples
-list_tuples = make_report(dictionary_prices, list_dictionary_portfolio)
 
-headers = ('Name', 'Shares', 'Price', 'Change')
-print('%10s %10s %10s %10s' % headers)
-print(('-'*10 + ' ') * len(headers))
-#for r in list_tuples:
-#	print('%10s %10d %10.2f %10.2f' % r)
 
-for name,shares,price,change in list_tuples:
-	dollar_price='$' + str(price)
-	print(f'{name:>10s} {shares:>10d} {dollar_price:>9s} {change:>10.2f}')
+
+
 
