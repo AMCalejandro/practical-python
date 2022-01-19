@@ -25,7 +25,7 @@ import csv
 #print(parse_csv("Data/portfolio.csv"))
 
 
-def parse_csv(filename, select = None):
+def parse_csv(filename, select = None, types = None):
     '''
     Parse a CSV file into a list of dictionaries
     '''
@@ -45,6 +45,8 @@ def parse_csv(filename, select = None):
                 continue
             if indices:
                 row = [row[index] for index in indices]
+            if types:
+                row = [func(val) for func,val in zip(types, row)]
 
             record = dict(zip(headers, row))
             records.append(record)
