@@ -25,13 +25,14 @@ import csv
 #print(parse_csv("Data/portfolio.csv"))
 
 
-def parse_csv(filename, select = None, types = None):
+def parse_csv(filename, select = None, types = None, has_headers = True):
     '''
     Parse a CSV file into a list of dictionaries
     '''
     with open(filename) as f:
         rows = csv.reader(f)
-        headers = next(rows)
+        if has_headers:
+            headers = next(rows)
 
         if select:
             indices = [headers.index(col_interest) for col_interest in select]
@@ -47,9 +48,11 @@ def parse_csv(filename, select = None, types = None):
                 row = [row[index] for index in indices]
             if types:
                 row = [func(val) for func,val in zip(types, row)]
-
-            record = dict(zip(headers, row))
-            records.append(record)
+            if has_headers:
+                record = dict(zip(headers, row))
+                records.append(record)
+            if not has_headers:
+                records.append(tuple(row))
 
     return records
 
