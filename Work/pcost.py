@@ -37,10 +37,10 @@
 #    return(sum)
 #    file.close()
 
-import fileparse
+import pcost_finalReport
 def portfolio_cost(filename):
     sum = 0
-    portfolio_dictlist = fileparse.parse_csv(filename, delimiter = ",")
+    portfolio_dictlist = pcost_finalReport.read_portfolio(filename, delimiter = ",")
     for index in range(len(portfolio_dictlist)):
         record = portfolio_dictlist[index]
         #print(record)
@@ -50,8 +50,6 @@ def portfolio_cost(filename):
             print("Missing integers in line:", index)
 
     return(sum)
-
-
 
 import sys
 if len(sys.argv) == 2:
