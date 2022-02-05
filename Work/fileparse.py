@@ -3,7 +3,7 @@
 # Exercise 3.3
 
 import csv
-
+import os
 #def parse_csv(filename, select = None):
 #    '''
 #    Parse a CSV file into a list of dictionaries
@@ -25,49 +25,53 @@ import csv
 #print(parse_csv("Data/portfolio.csv"))
 
 
-def parse_csv(filename, select = None, types = None, has_headers = True, delimiter = " ", silence_errors = False):
+def parse_csv(file_lines, select = None, types = None, has_headers = True, delimiter = ",", silence_errors = False):
     '''
     Parse a CSV file into a list of dictionaries
     '''
-    with open(filename) as f:
-        rows = csv.reader(f, delimiter = delimiter)
+    #with open(filename) as f:
+    #    rows = csv.reader(f, delimiter = delimiter)
 
-        if select and not has_headers:
-             raise RuntimeError('select requires column headers')
+    if os.path.isfile(file_lines):
+        raise ValueError("file_lines takes a file opened")
+    if select and not has_headers:
+        raise RuntimeError('select requires column headers')
+
+    rows = csv.reader(file_lines, delimiter=delimiter)
+
+    if has_headers:
+    #    headers = next(rows)
+        headers = next(rows)
+
+    if select:
+        indices = [headers.index(col_interest) for col_interest in select]
+        headers = select
+    else:
+        indices = []
+
+    records = []
+    for row_index,row in enumerate(rows):
+
+        if not row:
+            continue
+        if indices:
+            row = [row[index] for index in indices]
+
+
+        if types:
+             try:
+                 row = [func(val) for func,val in zip(types, row)]
+             except ValueError as e:
+                 if not silence_errors:
+                     print(f'Row {row_index + 1}: Couldn\'t convert {row}')
+                     print(f'Row {row_index + 1}: Reason invalid literal for int() with base 10: \'\'')
+                 continue
 
         if has_headers:
-            headers = next(rows)
-
-        if select:
-            indices = [headers.index(col_interest) for col_interest in select]
-            headers = select
+            record = dict(zip(headers, row))
+            records.append(record)
         else:
-            indices = []
-
-        records = []
-#        for row in rows:
-        for row_index,row in enumerate(rows):
-            if not row:
-                continue
-            if indices:
-                row = [row[index] for index in indices]
-
-
-            if types:
-#                row = [func(val) for func,val in zip(types, row)]
-                 try:
-                     row = [func(val) for func,val in zip(types, row)]
-                 except ValueError as e:
-                     if not silence_errors:
-                         print(f'Row {row_index + 1}: Couldn\'t convert {row}')
-                         print(f'Row {row_index + 1}: Reason invalid literal for int() with base 10: \'\'')
-                     continue
-
-            if has_headers:
-                record = dict(zip(headers, row))
-                records.append(record)
-            else:
-                records.append(tuple(row))
+            records.append(tuple(row))
 
     return records
 
