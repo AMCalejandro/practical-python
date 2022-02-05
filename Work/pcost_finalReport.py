@@ -11,7 +11,8 @@ def is_empty_or_blank(msg):
 
 
 def read_portfolio(filename, select = None, types = None, has_headers = True, delimiter = ",", silence_errors = False):
-	list_portfolio = fileparse.parse_csv(filename, select = select, types = types, has_headers = has_headers, delimiter= delimiter, silence_errors = silence_errors)
+	with open(filename) as lines:
+		list_portfolio = fileparse.parse_csv(lines, select = select, types = types, has_headers = has_headers, delimiter= delimiter, silence_errors = silence_errors)
 	return(list_portfolio)
 # Function to retrieve list of stocks
 # Improved with zip and enumerate.
@@ -46,7 +47,8 @@ def read_portfolio(filename, select = None, types = None, has_headers = True, de
 
 
 def read_prices(filename, select = None, types=None, has_headers = False,  delimiter = ",", silence_errors=False):
-	tuple_prices = fileparse.parse_csv(filename, select = select, types = types, has_headers = has_headers, delimiter= delimiter, silence_errors = silence_errors)
+	with open(filename) as lines:
+		tuple_prices = fileparse.parse_csv(lines, select = select, types = types, has_headers = has_headers, delimiter= delimiter, silence_errors = silence_errors)
 	return(tuple_prices)
 # Function to get the dictionary of prices
 #def read_prices(filename):
@@ -157,7 +159,19 @@ def portfolio_report(portfolio_filename, prices_filename, select_pf, types_pf, h
 	print_report(list_dictionary_portfolio, dictionary_prices)
 	print_sharesUpdate(list_dictionary_portfolio, dictionary_prices)
 
-portfolio_report('Data/portfolio.csv', 'Data/prices.csv', select_pf = ['name','shares','price'], types_pf = [str,int,float], has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False)
+
+
+def main(args):
+    if len(args) != 3:
+        raise SystemExit("Usage: %s portfolio pricefile" % args[0])
+    portfolio_report(args[1], args[2], select_pf = ['name','shares','price'], types_pf = [str,int,float], has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False)
+
+#portfolio_report('Data/portfolio.csv', 'Data/prices.csv', select_pf = ['name','shares','price'], types_pf = [str,int,float], has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False)
+
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)
+
 
 
 #def portfolio_report(portfolio_filename, prices_filename, select_pf, types_pf, has_headers_pf, delimiter_pf, silence_errors_pf=False):
