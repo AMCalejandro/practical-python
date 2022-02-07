@@ -32,8 +32,8 @@ def parse_csv(file_lines, select = None, types = None, has_headers = True, delim
     #with open(filename) as f:
     #    rows = csv.reader(f, delimiter = delimiter)
 
-    if os.path.isfile(file_lines):
-        raise ValueError("file_lines takes a file opened")
+    if isinstance(file_lines, str):
+        raise ValueError("file_lines takes a file opened, not a path to a file")
     if select and not has_headers:
         raise RuntimeError('select requires column headers')
 
