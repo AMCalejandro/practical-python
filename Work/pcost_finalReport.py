@@ -1,7 +1,7 @@
 # From list of stocks and dictionary of prices, get the current value plus gain/loss
 
 import fileparse
-
+import stock
 # Custom function to check for empty strings
 def is_empty_or_blank(msg):
 	""" This function checks if given string is empty
@@ -12,7 +12,8 @@ def is_empty_or_blank(msg):
 
 def read_portfolio(filename, select = None, types = None, has_headers = True, delimiter = ",", silence_errors = False):
 	with open(filename) as lines:
-		list_portfolio = fileparse.parse_csv(lines, select = select, types = types, has_headers = has_headers, delimiter= delimiter, silence_errors = silence_errors)
+		list_dictionaries = fileparse.parse_csv(lines, select = ['name','shares','price'], types = [str,int,float])
+		list_portfolio = [ stock.Stock(line['name'], line['shares'], line['price']) for line in list_dictionaries]
 	return(list_portfolio)
 # Function to retrieve list of stocks
 # Improved with zip and enumerate.
@@ -70,7 +71,7 @@ def make_summary(dict_prices, list_stocks):
 	list_init = []
 	#print(dict_prices)
 	for i in range(len(list_stocks)):
-		name,shares,price_old = list(list_stocks[i].values())
+		name,shares,price_old = list(list_stocks[i].__dict__.values()) # Using __dict__ variable to retrieve an list of the values from the stock.Stock instance
 		#print(name,shares,price_old)
 		price_new = float(dict_prices.get(name))
 		list_init.append((name,shares, price_new, (price_new - float(price_old))))
@@ -109,11 +110,13 @@ def make_summary(dict_prices, list_stocks):
 #	current_value += float(dictionary_prices[name_stock])*shares_stock
 def print_report(list_dictionary_portfolio, dictionary_prices):
 	# Doing sequence reduction to get the portfolio value in one line of code
-	portfolio_value = sum([float(s['price']) * int(s['shares']) for s in list_dictionary_portfolio])
+	#portfolio_value = sum([float(s['price']) * int(s['shares']) for s in list_dictionary_portfolio])
+	portfolio_value = sum([float(s.price) * int(s.shares) for s in list_dictionary_portfolio])
 	print("Initial portfolio value:", portfolio_value)
 
 	#Doing sequence reduction to get the current value of our portfolio
-	current_value = sum([ float(dictionary_prices[s['name']]) * int(s['shares']) for s in list_dictionary_portfolio])
+	#current_value = sum([ float(dictionary_prices[s['name']]) * int(s['shares']) for s in list_dictionary_portfolio])
+	current_value = sum([ float(dictionary_prices[s.name]) * int(s.shares) for s in list_dictionary_portfolio])
 	print("Current portofolio value", current_value)
 
 	# Printing the gain/loss
