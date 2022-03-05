@@ -45,7 +45,8 @@ def portfolio_cost(filename):
         record = portfolio_dictlist[index]
         #print(record)
         try:
-            sum += float(record['price'])*int(record['shares'])
+            #sum += float(record['price'])*int(record['shares'])
+            sum += float(record.price)*int(record.shares)
         except:
             print("Missing integers in line:", index)
 
