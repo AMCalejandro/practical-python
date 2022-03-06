@@ -13,7 +13,7 @@ def is_empty_or_blank(msg):
 def read_portfolio(filename, select = None, types = None, has_headers = True, delimiter = ",", silence_errors = False):
 	with open(filename) as lines:
 		list_dictionaries = fileparse.parse_csv(lines, select = ['name','shares','price'], types = [str,int,float])
-		list_portfolio = [ stock.Stock(line['name'], line['shares'], line['price']) for line in list_dictionaries]
+		list_portfolio = [ stock.Stock(dict['name'], dict['shares'], dict['price']) for dict in list_dictionaries]
 	return(list_portfolio)
 # Function to retrieve list of stocks
 # Improved with zip and enumerate.
