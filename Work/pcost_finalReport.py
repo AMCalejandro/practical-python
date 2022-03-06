@@ -165,10 +165,10 @@ def portfolio_report(portfolio_filename, prices_filename, select_pf = None, type
 
 	#print(list_dictionary_portfolio)
 	#print(dictionary_prices)
-	formatter = tableformat.TableFormatter()
+	#formatter = tableformat.TextTableFormatter()
+	formatter = tableformat.CSVTableFormatter()
 	print_report(list_dictionary_portfolio, dictionary_prices)
 	print_sharesUpdate(list_dictionary_portfolio, dictionary_prices, formatter)
-
 
 
 def main(args):
