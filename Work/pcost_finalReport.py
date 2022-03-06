@@ -111,7 +111,8 @@ def make_summary(dict_prices, list_stocks):
 def print_report(list_dictionary_portfolio, dictionary_prices):
 	# Doing sequence reduction to get the portfolio value in one line of code
 	#portfolio_value = sum([float(s['price']) * int(s['shares']) for s in list_dictionary_portfolio])
-	portfolio_value = sum([float(s.price) * int(s.shares) for s in list_dictionary_portfolio])
+	#portfolio_value = sum([float(s.price) * int(s.shares) for s in list_dictionary_portfolio])
+	portfolio_value = sum([s.cost() for s in list_dictionary_portfolio])
 	print("Initial portfolio value:", portfolio_value)
 
 	#Doing sequence reduction to get the current value of our portfolio
