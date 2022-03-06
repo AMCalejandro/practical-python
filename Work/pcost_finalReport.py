@@ -2,6 +2,7 @@
 
 import fileparse
 import stock
+import tableformat
 # Custom function to check for empty strings
 def is_empty_or_blank(msg):
 	""" This function checks if given string is empty
@@ -130,16 +131,21 @@ def print_report(list_dictionary_portfolio, dictionary_prices):
         	print('Neither gains nor losses')
 
 
-def print_sharesUpdate(list_dictionary_portfolio, dictionary_prices):
+def print_sharesUpdate(list_dictionary_portfolio, dictionary_prices, formatter):
 	# Using the list of stocks and dictionary of prices to come up with the list of tuples
 	list_tuples = make_summary(dictionary_prices, list_dictionary_portfolio)
-	headers = ('Name', 'Shares', 'Price', 'Change')
-	print('%10s %10s %10s %10s' % headers)
-	print(('-'*10 + ' ') * len(headers))
+	formatter.headings(['Name','Shares','Price','Change'])
+	#headers = ('Name', 'Shares', 'Price', 'Change')
+	#print('%10s %10s %10s %10s' % headers)
+	#print(('-'*10 + ' ') * len(headers))
 
-	for name,shares,price,change in list_tuples:
-	        dollar_price='$' + str(price)
-        	print(f'{name:>10s} {shares:>10d} {dollar_price:>9s} {change:>10.2f}')
+
+	for name, shares, price, change in list_tuples:
+		rowdata = [ name, str(shares), f'{price:0.2f}', f'{change:0.2f}' ]
+		formatter.row(rowdata)
+	#for name,shares,price,change in list_tuples:
+	#	dollar_price='$' + str(price)
+        #	print(f'{name:>10s} {shares:>10d} {dollar_price:>9s} {change:>10.2f}')
 
 
 
@@ -153,15 +159,15 @@ def print_sharesUpdate(list_dictionary_portfolio, dictionary_prices):
 #portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
 
 
-def portfolio_report(portfolio_filename, prices_filename, select_pf, types_pf, has_headers_pf, delimiter_pf, silence_errors_pf, select_pc = None, types_pc = None, has_headers_pc = False, delimiter_pc = ",", silence_errors_pc = False):
+def portfolio_report(portfolio_filename, prices_filename, select_pf = None, types_pf = None, has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False, select_pc = None, types_pc = None, has_headers_pc = False, delimiter_pc = ",", silence_errors_pc = False):
 	list_dictionary_portfolio = read_portfolio(portfolio_filename, select = select_pf, types = types_pf, has_headers = has_headers_pf, delimiter = delimiter_pf, silence_errors = silence_errors_pf)
 	dictionary_prices = dict(read_prices(prices_filename, select = select_pc, types = types_pc, has_headers = has_headers_pc, delimiter = delimiter_pc, silence_errors = silence_errors_pc))
 
 	#print(list_dictionary_portfolio)
 	#print(dictionary_prices)
-
+	formatter = tableformat.TableFormatter()
 	print_report(list_dictionary_portfolio, dictionary_prices)
-	print_sharesUpdate(list_dictionary_portfolio, dictionary_prices)
+	print_sharesUpdate(list_dictionary_portfolio, dictionary_prices, formatter)
 
 
 
