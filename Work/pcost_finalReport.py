@@ -166,15 +166,8 @@ def portfolio_report(portfolio_filename, prices_filename, select_pf = None, type
 	#print(list_dictionary_portfolio)
 	#print(dictionary_prices)
 	#formatter = tableformat.TextTableFormatter()
-	if fmt == 'txt':
-		formatter = tableformat.TextTableFormatter()
-	elif fmt == 'csv':
-		formatter = tableformat.CSVTableFormatter()
-	elif fmt == 'html':
-		formatter = tableformat.HTMLTableFormatter()
-	else:
-		raise RuntimeError(f'Unknown format {fmt}')
 
+	formatter = tableformat.create_formatter(fmt)
 	print_report(list_dictionary_portfolio, dictionary_prices)
 	print_sharesUpdate(list_dictionary_portfolio, dictionary_prices, formatter)
 
