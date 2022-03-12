@@ -159,14 +159,22 @@ def print_sharesUpdate(list_dictionary_portfolio, dictionary_prices, formatter):
 #portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
 
 
-def portfolio_report(portfolio_filename, prices_filename, select_pf = None, types_pf = None, has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False, select_pc = None, types_pc = None, has_headers_pc = False, delimiter_pc = ",", silence_errors_pc = False):
+def portfolio_report(portfolio_filename, prices_filename, select_pf = None, types_pf = None, has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False, select_pc = None, types_pc = None, has_headers_pc = False, delimiter_pc = ",", silence_errors_pc = False, fmt = 'txt'):
 	list_dictionary_portfolio = read_portfolio(portfolio_filename, select = select_pf, types = types_pf, has_headers = has_headers_pf, delimiter = delimiter_pf, silence_errors = silence_errors_pf)
 	dictionary_prices = dict(read_prices(prices_filename, select = select_pc, types = types_pc, has_headers = has_headers_pc, delimiter = delimiter_pc, silence_errors = silence_errors_pc))
 
 	#print(list_dictionary_portfolio)
 	#print(dictionary_prices)
 	#formatter = tableformat.TextTableFormatter()
-	formatter = tableformat.CSVTableFormatter()
+	if fmt == 'txt':
+		formatter = tableformat.TextTableFormatter()
+	elif fmt == 'csv':
+		formatter = tableformat.CSVTableFormatter()
+	elif fmt == 'html':
+		formatter = tableformat.HTMLTableFormatter()
+	else:
+		raise RuntimeError(f'Unknown format {fmt}')
+
 	print_report(list_dictionary_portfolio, dictionary_prices)
 	print_sharesUpdate(list_dictionary_portfolio, dictionary_prices, formatter)
 
