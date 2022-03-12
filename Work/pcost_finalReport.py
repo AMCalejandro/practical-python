@@ -173,9 +173,9 @@ def portfolio_report(portfolio_filename, prices_filename, select_pf = None, type
 
 
 def main(args):
-    if len(args) != 3:
-        raise SystemExit("Usage: %s portfolio pricefile" % args[0])
-    portfolio_report(args[1], args[2], select_pf = ['name','shares','price'], types_pf = [str,int,float], has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False)
+    if len(args) != 4:
+        raise SystemExit("Usage: %s portfolio pricefile format" % args[0])
+    portfolio_report(args[1], args[2], select_pf = ['name','shares','price'], types_pf = [str,int,float], delimiter_pf = ",", fmt = args[3])
 
 #portfolio_report('Data/portfolio.csv', 'Data/prices.csv', select_pf = ['name','shares','price'], types_pf = [str,int,float], has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False)
 
