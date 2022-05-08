@@ -39,18 +39,19 @@
 
 import pcost_finalReport
 def portfolio_cost(filename):
-    sum = 0
+    #sum = 0
     portfolio_dictlist = pcost_finalReport.read_portfolio(filename, delimiter = ",")
-    for index in range(len(portfolio_dictlist)):
-        record = portfolio_dictlist[index]
+    #for index in range(len(portfolio_dictlist)):
+    #    record = portfolio_dictlist[index]
         #print(record)
-        try:
+    #    try:
             #sum += float(record['price'])*int(record['shares'])
-            sum += float(record.price)*int(record.shares)
-        except:
-            print("Missing integers in line:", index)
+    #        sum += float(record.price)*int(record.shares)
+    #    except:
+    #        print("Missing integers in line:", index)
 
-    return(sum)
+    #return(sum)
+    return portfolio_dictlist.total_cost
 
 
 def main(args):
