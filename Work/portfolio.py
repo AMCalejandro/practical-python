@@ -10,14 +10,16 @@ class Portfolio:
         return self._holdings[index]
 
     def __contains__(self, name):
-        return any([ s.name == name for s in self._holdings])
+        #return any([ s.name == name for s in self._holdings])
+        return any(s.name == name for s in self._holdings)
 
     def __iter__(self):
         return self._holdings.__iter__()
 
     @property
     def total_cost(self):
-        return sum([s.cost for s in self._holdings])
+        #return sum([s.cost for s in self._holdings])
+        return sum(s.cost for s in self._holdings)
 
     def tabulate_shares(self):
         from collections import Counter
