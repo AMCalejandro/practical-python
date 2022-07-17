@@ -12,11 +12,13 @@ def is_empty_or_blank(msg):
 	return re.search("^\s*$", msg)
 
 
-def read_portfolio(filename, select = None, types = None, has_headers = True, delimiter = ",", silence_errors = False):
+def read_portfolio(filename, **opts):
 	with open(filename) as lines:
-		list_dictionaries = fileparse.parse_csv(lines, select = ['name','shares','price'], types = [str,int,float])
-		list_portfolio = [ stock.Stock(dict['name'], dict['shares'], dict['price']) for dict in list_dictionaries]
-	#return(list_portfolio)
+		list_dictionaries = fileparse.parse_csv(lines,
+							select = ['name','shares','price'],
+							types = [str,int,float],
+							**opts)
+		list_portfolio = [stock.Stock(**dict) for dict in list_dictionaries]
 	return Portfolio(list_portfolio)
 # Function to retrieve list of stocks
 # Improved with zip and enumerate.
@@ -50,9 +52,9 @@ def read_portfolio(filename, select = None, types = None, has_headers = True, de
 #        return(list_init)
 
 
-def read_prices(filename, select = None, types=None, has_headers = False,  delimiter = ",", silence_errors=False):
+def read_prices(filename, **opts):
 	with open(filename) as lines:
-		tuple_prices = fileparse.parse_csv(lines, select = select, types = types, has_headers = has_headers, delimiter= delimiter, silence_errors = silence_errors)
+		tuple_prices = fileparse.parse_csv(lines, **opts)
 	return(tuple_prices)
 # Function to get the dictionary of prices
 #def read_prices(filename):
@@ -168,10 +170,12 @@ def print_sharesUpdate(list_dictionary_portfolio, dictionary_prices, formatter):
 #portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
 
 
-def portfolio_report(portfolio_filename, prices_filename, select_pf = None, types_pf = None, has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False, select_pc = None, types_pc = None, has_headers_pc = False, delimiter_pc = ",", silence_errors_pc = False, fmt = 'txt'):
-	list_dictionary_portfolio = read_portfolio(portfolio_filename, select = select_pf, types = types_pf, has_headers = has_headers_pf, delimiter = delimiter_pf, silence_errors = silence_errors_pf)
-	dictionary_prices = dict(read_prices(prices_filename, select = select_pc, types = types_pc, has_headers = has_headers_pc, delimiter = delimiter_pc, silence_errors = silence_errors_pc))
-
+#def portfolio_report(portfolio_filename, prices_filename, select_pf = None, types_pf = None, has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False, select_pc = None, types_pc = None, has_headers_pc = False, delimiter_pc = ",", silence_errors_pc = False, fmt = 'txt'):
+def portfolio_report(portfolio_filename, prices_filename, fmt = 'txt'):
+	#list_dictionary_portfolio = read_portfolio(portfolio_filename, select = select_pf, types = types_pf, has_headers = has_headers_pf, delimiter = delimiter_pf, silence_errors = silence_errors_pf)
+	list_dictionary_portfolio = read_portfolio(portfolio_filename, silence_errors = False)
+	#dictionary_prices = dict(read_prices(prices_filename, select = select_pc, types = types_pc, has_headers = has_headers_pc, delimiter = delimiter_pc, silence_errors = silence_errors_pc))
+	dictionary_prices = dict(read_prices(prices_filename, has_headers = False, types = [str,float]))
 	#print(list_dictionary_portfolio)
 	#print(dictionary_prices)
 	#formatter = tableformat.TextTableFormatter()
@@ -184,7 +188,8 @@ def portfolio_report(portfolio_filename, prices_filename, select_pf = None, type
 def main(args):
     if len(args) != 4:
         raise SystemExit("Usage: %s portfolio pricefile format" % args[0])
-    portfolio_report(args[1], args[2], select_pf = ['name','shares','price'], types_pf = [str,int,float], delimiter_pf = ",", fmt = args[3])
+    #portfolio_report(args[1], args[2], select_pf = ['name','shares','price'], types_pf = [str,int,float], delimiter_pf = ",", fmt = args[3])
+    portfolio_report(args[1], args[2], fmt = args[3])
 
 #portfolio_report('Data/portfolio.csv', 'Data/prices.csv', select_pf = ['name','shares','price'], types_pf = [str,int,float], has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False)
 
