@@ -15,10 +15,10 @@ def make_dict(rows, header):
     for row in rows:
         yield {name:value for name,value in zip(header, row) } #dict(zip(header, row))
 
-def filter_symbols(rows, names):
-    for row in rows:
-        if row['name'] in names:
-            yield row
+#def filter_symbols(rows, names):
+    #for row in rows:
+    #    if row['name'] in names:
+    #        yield row
 
 portfolio = read_portfolio("Data/portfolio.csv")
 
@@ -32,11 +32,12 @@ def parse_stock_data(lines):
 
 
 def ticker(portfile, logfile, fmt):
-    stock_live = follow("Data/stocklog.csv")
+    stock_live = follow(logfile)
     rows = parse_stock_data(stock_live) # For each live row, we get it on dict format
 
     portfolio = read_portfolio("Data/portfolio.csv")
-    rows = filter_symbols(rows, portfolio) # Check if the live rows are in portfolio.
+    #rows = filter_symbols(rows, portfolio) # Check if the live rows are in portfolio.
+    rows = (row for row in rows if row['name'] in portfolio)
 
     formatter = tableformat.create_formatter(fmt)    #We create the formatter
     formatter.headings(['Name','Price','Change']) # We pass the heading tou our formatter
