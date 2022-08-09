@@ -21,18 +21,18 @@ class Stock:
     def __repr__(self):
         return f'Stock({self.name!r}, {self.shares!r}, {self.price!r})'
 
-#    @property
-#    def cost(self):
-#        '''
-#        Method that returns the cost of current shares according to market price
-#        '''
-#        return self.shares * self.price
+    @property
+    def cost(self):
+        '''
+        Method that returns the cost of current shares according to market price
+        '''
+        return self.shares * self.price
 
-#    def sell(self, sells):
-#        '''
-#        A method to update the total shares after selling some
-#        '''
-#        self.shares -= sells
+    def sell(self, sells):
+        '''
+        A method to update the total shares after selling some
+        '''
+        self.shares -= sells
 
 #    @property
 #    def shares(self):

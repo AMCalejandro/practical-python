@@ -13,13 +13,18 @@ def is_empty_or_blank(msg):
 
 
 def read_portfolio(filename, **opts):
+	#with open(filename) as lines:
+	#	list_dictionaries = fileparse.parse_csv(lines,
+	#						select = ['name','shares','price'],
+	#						types = [str,int,float],
+	#						**opts)
+	#	list_portfolio = [stock.Stock(**dict) for dict in list_dictionaries]
+	#return Portfolio(list_portfolio)
 	with open(filename) as lines:
-		list_dictionaries = fileparse.parse_csv(lines,
-							select = ['name','shares','price'],
-							types = [str,int,float],
-							**opts)
-		list_portfolio = [stock.Stock(**dict) for dict in list_dictionaries]
-	return Portfolio(list_portfolio)
+		return Portfolio.from_csv(lines, **opts)
+
+
+
 # Function to retrieve list of stocks
 # Improved with zip and enumerate.
 # read_portfolio is not hardcoded anymore and now is able to access the values of interest
@@ -173,7 +178,9 @@ def print_sharesUpdate(list_dictionary_portfolio, dictionary_prices, formatter):
 #def portfolio_report(portfolio_filename, prices_filename, select_pf = None, types_pf = None, has_headers_pf = True, delimiter_pf = ",", silence_errors_pf = False, select_pc = None, types_pc = None, has_headers_pc = False, delimiter_pc = ",", silence_errors_pc = False, fmt = 'txt'):
 def portfolio_report(portfolio_filename, prices_filename, fmt = 'txt'):
 	#list_dictionary_portfolio = read_portfolio(portfolio_filename, select = select_pf, types = types_pf, has_headers = has_headers_pf, delimiter = delimiter_pf, silence_errors = silence_errors_pf)
+
 	list_dictionary_portfolio = read_portfolio(portfolio_filename, silence_errors = False)
+
 	#dictionary_prices = dict(read_prices(prices_filename, select = select_pc, types = types_pc, has_headers = has_headers_pc, delimiter = delimiter_pc, silence_errors = silence_errors_pc))
 	dictionary_prices = dict(read_prices(prices_filename, has_headers = False, types = [str,float]))
 	#print(list_dictionary_portfolio)
