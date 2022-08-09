@@ -17,7 +17,3 @@ if __name__ == '__main__':
 
     #Runnning countdown test in __main__
     countdown(1000000)
-
-
-
-
